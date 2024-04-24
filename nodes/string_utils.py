@@ -18,6 +18,21 @@ class FBMultilineString:
         return (value,)
 
 
+@register_node("FB Multiline String List")
+class FBMultilineStringList:
+    CATEGORY = "FredBill1"
+    INPUT_TYPES = lambda: {
+        "required": {
+            "value": ("STRING", {"default": "", "multiline": True, "dynamicPrompts": False}),
+        }
+    }
+    RETURN_TYPES = ("STRING_LIST",)
+    FUNCTION = "execute"
+
+    def execute(self, value: str) -> tuple[list[str]]:
+        return ([line.strip() for line in value.split("\n")],)
+
+
 @register_node("FB String Split")
 class FBStringSplit:
     CATEGORY = "FredBill1"
