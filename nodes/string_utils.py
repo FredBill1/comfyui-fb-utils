@@ -1,4 +1,5 @@
 import codecs
+import re
 
 from ..node_mappings import register_node
 
@@ -80,19 +81,23 @@ class FBStringReplace:
             "olds": ("STRING", {"default": "", "multiline": True, "dynamicPrompts": False}),
             "news": ("STRING", {"default": "", "multiline": True, "dynamicPrompts": False}),
             "recursive": ("BOOLEAN", {"default": True}),
+            "use_regex": ("BOOLEAN", {"default": False}),
         }
     }
     RETURN_TYPES = ("STRING",)
     FUNCTION = "execute"
 
-    def execute(self, value: str, olds: str, news: str, recursive: bool) -> tuple[str]:
+    def execute(self, value: str, olds: str, news: str, recursive: bool, use_regex: bool) -> tuple[str]:
         olds = [line for line in olds.split("\n")]
         news = [line for line in news.split("\n")]
         assert len(olds) == len(news), "The number of old and new strings must be the same."
         while True:
             old_value = value
             for old, new in zip(olds, news):
-                value = value.replace(old, new)
+                if use_regex:
+                    value = re.sub(old, new, value)
+                else:
+                    value = value.replace(old, new)
             if not (recursive and old_value != value):
                 break
         return (value,)
