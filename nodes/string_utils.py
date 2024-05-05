@@ -1,5 +1,6 @@
 import codecs
 import re
+from typing import Optional
 
 from ..node_mappings import register_node
 
@@ -25,13 +26,19 @@ class FBMultilineStringList:
     INPUT_TYPES = lambda: {
         "required": {
             "value": ("STRING", {"default": "", "multiline": True, "dynamicPrompts": False}),
-        }
+        },
+        "optional": {
+            "prepend": ("STRING_LIST",),
+        },
     }
     RETURN_TYPES = ("STRING_LIST",)
     FUNCTION = "execute"
 
-    def execute(self, value: str) -> tuple[list[str]]:
-        return ([line.strip() for line in value.split("\n")],)
+    def execute(self, value: str, prepend: Optional[list[str]] = None) -> tuple[list[str]]:
+        res = [line.strip() for line in value.split("\n")]
+        if prepend is not None:
+            res = prepend + res
+        return (res,)
 
 
 @register_node("FB String Split")
