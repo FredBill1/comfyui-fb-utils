@@ -26,6 +26,7 @@ class FBMultilineStringList:
     INPUT_TYPES = lambda: {
         "required": {
             "value": ("STRING", {"default": "", "multiline": True, "dynamicPrompts": False}),
+            "enabled": ("BOOLEAN", {"default": True}),
         },
         "optional": {
             "prepend": ("STRING_LIST",),
@@ -34,8 +35,8 @@ class FBMultilineStringList:
     RETURN_TYPES = ("STRING_LIST",)
     FUNCTION = "execute"
 
-    def execute(self, value: str, prepend: Optional[list[str]] = None) -> tuple[list[str]]:
-        res = [line.strip() for line in value.split("\n")]
+    def execute(self, value: str, enabled: bool, prepend: Optional[list[str]] = None) -> tuple[list[str]]:
+        res = [line.strip() for line in value.split("\n")] if enabled else []
         if prepend is not None:
             res = prepend + res
         return (res,)
