@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-fb-utils"
 description = "Nodes:FBStringJoin, FBStringSplit, FBMultilineStringList, FBMultilineString, FBCustomFunction"
-version = "0.0.1"
+version = "0.0.2"
 
 [project.urls]
 Repository = "https://github.com/FredBill1/comfyui-fb-utils"
